@@ -209,7 +209,8 @@ const pool = require('../db/dbConfig');
                 message: "There is no envelope with this id"
             });
         };
-        const deletedEnvelope = await pool.query('DELETE FROM envelopes WHERE id = $1', [envelopeId]);
+        
+        await pool.query('DELETE FROM envelopes WHERE id = $1', [envelopeId]);
         res.sendStatus(204); 
     } catch (error) {
         console.error(error.message);
@@ -262,12 +263,13 @@ envelopeRouter.post('/transfer/:from/:to', async (req, res) => {
     try {
         const { from, to } = req.params;
         const { amount } = req.body;
-        const transferFrom = await pool.query('UPDATE envelope SET budget = budget - $1 WHERE id = $2', [amount, from]);
-        const transferTo = await pool.query('UPDATE envelope SET budget = budget + $1 WHERE id = $2', [amount, to]);
+        await pool.query('UPDATE envelope SET budget = budget - $1 WHERE id = $2', [amount, from]);
+        await pool.query('UPDATE envelope SET budget = budget + $1 WHERE id = $2', [amount, to]);
         res.json(`The budget of the envelope number ${from} and ${to} have been successfully updated`);
     } catch (error) {
         console.error(error.message);
     };
 });   
+
 
 module.exports = envelopeRouter;
