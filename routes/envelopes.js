@@ -69,7 +69,7 @@ const pool = require('../db/dbConfig');
         res.status(200).send({
             status: 'Sucess',
             message: 'Envelope information retrieved!',
-            data: anEnveloppe.rows[0]
+            data: envelope.rows[0]
         });
     } catch (error) {
         console.error(error.message);
